@@ -20,4 +20,4 @@ def measure_time(n: int, max_delay: int) -> float:
     s: float = time.perf_counter()
     run(wait_n(n, max_delay))
     elapsed: float = time.perf_counter() - s
-    return elapsed
+    return elapsed / n

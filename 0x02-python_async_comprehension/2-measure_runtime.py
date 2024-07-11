@@ -8,7 +8,8 @@ and return it.
 """
 import time
 import asyncio
-async_comprehension = __import__('1-async_comprehension').async_comprehension
+async_c = __import__('1-async_comprehension').async_comprehension
+
 
 async def measure_runtime() -> float:
     """
@@ -18,7 +19,7 @@ async def measure_runtime() -> float:
     measure_runtime should measure the total runtime
     and return it.
     """
-    start = time.time()
-    await asyncio.gather(async_comprehension(), async_comprehension(), async_comprehension(), async_comprehension())
-    end = time.time()
+    start: float = time.time()
+    await asyncio.gather(async_c(), async_c(), async_c(), async_c())
+    end: float = time.time()
     return end - start

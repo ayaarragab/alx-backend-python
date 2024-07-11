@@ -15,4 +15,4 @@ async def async_generator() -> AsyncIterator[float]:
     """
     for i in range(0, 10):
         await sleep(1)
-        yield random.uniform(0, 10)
+        yield random.uniform(0, 11)

@@ -5,14 +5,14 @@ that takes no arguments
 """
 import random
 from asyncio import sleep
-from typing import AsyncIterator
+from typing import Generator
 
 
-async def async_generator() -> AsyncIterator[float]:
+async def async_generator() -> Generator[float, None, None]:
     """
     a coroutine called async_generator
     that takes no arguments
     """
-    for i in range(0, 10):
+    for _ in range(10):
         await sleep(1)
         yield random.uniform(0, 10)

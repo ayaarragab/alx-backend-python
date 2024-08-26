@@ -3,10 +3,11 @@
 unittests for Generic
 utilities for github org client.
 """
-from unittest import TestCase, main
+from unittest import TestCase, main, mock
 from parameterized import parameterized
-from utils import access_nested_map
+from utils import access_nested_map, get_json
 from typing import Any, Dict, Tuple
+import utils
 
 
 class TestAccessNestedMap(TestCase):
@@ -33,6 +34,35 @@ class TestAccessNestedMap(TestCase):
         """Test access_nested_map method raises KeyError."""
         with self.assertRaises(KeyError):
             access_nested_map(nested_map, path)
+
+
+class TestGetJson(TestCase):
+    """
+    class and implement the TestGetJson.test_get_json method to test that
+    utils.get_json returns the expected result.
+    """
+
+    @parameterized.expand([
+       ("http://example.com", {"payload": True}),
+       ("http://holberton.io", {"payload": False})
+    ])
+    @mock.patch('utils.requests.get')
+    def test_get_json(self, test_url, test_payload, mock_get):
+        """
+        test that utils.get_json returns
+        the expected result.
+        """
+        mock_response = mock.Mock()
+        mock_response.json.return_value = test_payload
+        mock_get.return_value = mock_response
+
+        result = get_json(test_url)
+
+        # Assert that the get_json function returns the expected payload
+        self.assertEqual(result, test_payload)
+
+        # Assert that requests.get was called once with the test_url
+        mock_get.assert_called_once_with(test_url)
 
 
 if __name__ == "__main__":

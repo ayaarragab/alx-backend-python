@@ -25,6 +25,15 @@ class TestGithubOrgClient(TestCase):
         url = f"https://api.github.com/orgs/{input}"
         mock_get_json.assert_called_once_with(url)
 
+    def test_public_repos_url(self):
+        """test_public_repos_url
+        """
+        with mock.patch('client.GithubOrgClient.org') as m:
+            m.return_value = {'name': 'test_org', 'public_repos': 10}
+            res = GithubOrgClient('test')
+            self.assertEqual(res.org(),
+                             {'name': 'test_org', 'public_repos': 10})
+
 
 if __name__ == '__main__':
     main()

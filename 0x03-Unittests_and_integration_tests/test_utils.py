@@ -57,11 +57,7 @@ class TestGetJson(TestCase):
         mock_get.return_value = mock_response
 
         result = get_json(test_url)
-
-        # Assert that the get_json function returns the expected payload
         self.assertEqual(result, test_payload)
-
-        # Assert that requests.get was called once with the test_url
         mock_get.assert_called_once_with(test_url)
 
 

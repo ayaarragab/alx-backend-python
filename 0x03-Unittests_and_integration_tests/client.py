@@ -25,12 +25,12 @@ class GithubOrgClient:
     @memoize
     def org(self) -> Dict:
         """Memoize org"""
-        return get_json(self.ORG_URL.format(org=self._org_name))
+        return get_json(self.ORG_URL.format(org=self._org_name)) # returns a dict json of GET _org_name url response
 
     @property
     def _public_repos_url(self) -> str:
         """Public repos URL"""
-        return self.org["repos_url"]
+        return self.org["repos_url"] # returns "repos_url" value in org() dict json - GET _org_name url response -
 
     @memoize
     def repos_payload(self) -> Dict:

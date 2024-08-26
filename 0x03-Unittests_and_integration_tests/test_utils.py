@@ -82,5 +82,6 @@ class TestMemoize(TestCase):
             test_class.a_property()
             _mock.assert_called_once()
 
+
 if __name__ == "__main__":
     main()

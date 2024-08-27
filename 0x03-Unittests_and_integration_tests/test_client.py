@@ -72,7 +72,7 @@ class TestGithubOrgClient(TestCase):
 
 
 @parameterized_class([
-    {"org_payload": org_payload, "repos_payload": repos_payload, 
+    {"org_payload": org_payload, "repos_payload": repos_payload,
      "expected_repos": expected_repos, "apache2_repos": apache2_repos}
 ])
 class TestIntegrationGithubOrgClient(TestCase):
@@ -84,7 +84,7 @@ class TestIntegrationGithubOrgClient(TestCase):
         """Set up the class before running tests."""
         cls.get_patcher = patch('requests.get')
         cls.mock_get = cls.get_patcher.start()
-        
+
         # Define the side_effect function to return different responses
         def get_json(url):
             if url == "https://api.github.com/orgs/test_org":
@@ -94,7 +94,7 @@ class TestIntegrationGithubOrgClient(TestCase):
             return None
 
         cls.mock_get.return_value.json.side_effect = get_json
-    
+
     @classmethod
     def tearDownClass(cls):
         """Tear down the class after running tests."""

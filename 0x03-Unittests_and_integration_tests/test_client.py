@@ -9,7 +9,7 @@ from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
 from unittest.mock import patch, PropertyMock
 from typing import Any, Dict, Tuple
-from fixtures import org_payload, repos_payload, expected_repos, apache2_repos
+from fixtures import TEST_PAYLOAD
 
 
 class TestGithubOrgClient(TestCase):
@@ -71,17 +71,16 @@ class TestGithubOrgClient(TestCase):
         self.assertEqual(obj.has_license(repo, license_key), expected)
 
 
-@parameterized_class([
-    {"org_payload": org_payload, "repos_payload": repos_payload,
-     "expected_repos": expected_repos, "apache2_repos": apache2_repos}
-])
+@parameterized_class(
+    ("org_payload", "repos_payload", "expected_repos", "apache2_repos"),
+    TEST_PAYLOAD
+)
 class TestIntegrationGithubOrgClient(TestCase):
-    """
-    integration test
-    """
+    """ Class for Integration test of fixtures """
+
     @classmethod
     def setUpClass(cls):
-        """Set up the class before running tests."""
+        """A class method called before tests in an individual class are run"""
         config = {'return_value.json.side_effect':
                   [
                       cls.org_payload, cls.repos_payload,
@@ -89,6 +88,9 @@ class TestIntegrationGithubOrgClient(TestCase):
                   ]
                   }
         cls.get_patcher = patch('requests.get', **config)
+
+        cls.mock = cls.get_patcher.start()
+
 
     @classmethod
     def tearDownClass(cls):

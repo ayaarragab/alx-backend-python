@@ -8,6 +8,7 @@ from unittest import (
 from parameterized import parameterized
 from client import GithubOrgClient
 from unittest.mock import patch, PropertyMock
+from typing import Any, Dict, Tuple
 
 
 class TestGithubOrgClient(TestCase):
@@ -17,7 +18,7 @@ class TestGithubOrgClient(TestCase):
     @parameterized.expand([('google'), ('abc')])
     # pathes the function according to where it used in
     @mock.patch('client.get_json')
-    def test_org(self, input, mock_get_json):
+    def test_org(self, input: str, mock_get_json: Any) -> None:
         """ tests org()
         """
         res = GithubOrgClient(input)
@@ -25,7 +26,7 @@ class TestGithubOrgClient(TestCase):
         url = f"https://api.github.com/orgs/{input}"
         mock_get_json.assert_called_once_with(url)
 
-    def test_public_repos_url(self):
+    def test_public_repos_url(self) -> None:
         """test_public_repos_url
         """
         with mock.patch('client.GithubOrgClient.org') as m:
@@ -35,7 +36,7 @@ class TestGithubOrgClient(TestCase):
                              {'name': 'test_org', 'public_repos': 10})
 
     @patch('client.get_json')
-    def test_public_repos(self, mock_json):
+    def test_public_repos(self, mock_json: Any) -> None:
         """
         Test that the list of repos is what you expect from the chosen payload.
         Test that the mocked property and the mocked get_json was called once.

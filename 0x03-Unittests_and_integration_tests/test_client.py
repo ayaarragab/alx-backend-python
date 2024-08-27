@@ -5,9 +5,9 @@
 from unittest import (
     main, TestCase, mock
 )
-
 from parameterized import parameterized
 from client import GithubOrgClient
+from unittest.mock import patch, PropertyMock
 
 
 class TestGithubOrgClient(TestCase):
@@ -34,20 +34,27 @@ class TestGithubOrgClient(TestCase):
             self.assertEqual(res.org(),
                              {'name': 'test_org', 'public_repos': 10})
 
-    # Mock get_json function in the client module
-    @mock.patch('client.get_json')
-    def test_public_repos(self, mocked_get_json):
-        """Test that the _public_repos_url property uses get_json correctly."""
-        mocked_get_json.return_value = [{"name": "insta"}]
-        with mock.patch('client.GithubOrgClient._public_repos_url',
-                        new_callable=mock.PropertyMock) as m:
-            m.return_value = "hello"
-            obj = GithubOrgClient('test')
-            val = obj.public_repos()
-            check = [i["name"] for i in mocked_get_json.return_value]
-            self.assertEqual(val, check)
-            m.assert_called_once()
-            mocked_get_json.assert_called_once()
+    @patch('client.get_json')
+    def test_public_repos(self, mock_json):
+        """
+        Test that the list of repos is what you expect from the chosen payload.
+        Test that the mocked property and the mocked get_json was called once.
+        """
+        json_payload = [{"name": "Google"}, {"name": "Twitter"}]
+        mock_json.return_value = json_payload
+
+        with patch('client.GithubOrgClient._public_repos_url',
+                   new_callable=PropertyMock) as mock_public:
+
+            mock_public.return_value = "hello/world"
+            test_class = GithubOrgClient('test')
+            result = test_class.public_repos()
+
+            check = [i["name"] for i in json_payload]
+            self.assertEqual(result, check)
+
+            mock_public.assert_called_once()
+            mock_json.assert_called_once()
 
 
 if __name__ == '__main__':

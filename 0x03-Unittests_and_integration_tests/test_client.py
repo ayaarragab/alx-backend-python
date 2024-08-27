@@ -82,18 +82,13 @@ class TestIntegrationGithubOrgClient(TestCase):
     @classmethod
     def setUpClass(cls):
         """Set up the class before running tests."""
-        cls.get_patcher = patch('requests.get')
-        cls.mock_get = cls.get_patcher.start()
-
-        # Define the side_effect function to return different responses
-        def get_json(url):
-            if url == "https://api.github.com/orgs/test_org":
-                return org_payload
-            elif url == "https://api.github.com/orgs/test_org/repos":
-                return repos_payload
-            return None
-
-        cls.mock_get.return_value.json.side_effect = get_json
+        config = {'return_value.json.side_effect':
+                  [
+                      cls.org_payload, cls.repos_payload,
+                      cls.org_payload, cls.repos_payload
+                  ]
+                  }
+        cls.get_patcher = patch('requests.get', **config)
 
     @classmethod
     def tearDownClass(cls):
